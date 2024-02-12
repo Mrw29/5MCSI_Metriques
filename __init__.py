@@ -30,6 +30,37 @@ def meteo():
 @app.route("/rapport/")
 def mongraphique():
     return render_template("graphique.html")
+
+import requests
+import plotly.graph_objs as go
+from flask import Flask, render_template
+
+app = Flask(__name__)
+
+@app.route('/histogramme/')
+def histogramme():
+    api_key = 'xxx'  # Remplacez xxx par votre clé d'API OpenWeatherMap
+    url = 'https://samples.openweathermap.org/data/2.5/forecast?lat=0&lon=0&appid=' + api_key
+    response = requests.get(url)
+    data = response.json()
+
+    temperatures = [item['main']['temp'] for item in data['list']]
+
+    histogram = go.Histogram(x=temperatures)
+
+    layout = go.Layout(title='Histogramme des Températures',
+                       xaxis=dict(title='Température (°C)'),
+                       yaxis=dict(title='Fréquence'))
+
+    fig = go.Figure(data=[histogram], layout=layout)
+
+    graph_json = fig.to_json()
+
+    return render_template('histogramme.html', graphJSON=graph_json)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
   
 if __name__ == "__main__":
   app.run(debug=True)
