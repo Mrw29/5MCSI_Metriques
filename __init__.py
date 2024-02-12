@@ -57,10 +57,6 @@ def histogramme():
     graph_json = fig.to_json()
 
     return render_template('histogramme.html', graphJSON=graph_json)
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
   
 if __name__ == "__main__":
   app.run(debug=True)
